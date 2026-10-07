@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { SHFM_OFFICIAL_URL } from "@/components/clinical/PrognosticTools"
+import { H2fpefCalculator, HfpefAbaCalculator } from "@/components/clinical/HfpefTools"
 
 function Fact({ children }: { children: React.ReactNode }) {
   return <li className="text-sm text-slate-700">{children}</li>
@@ -41,11 +42,12 @@ export default function RecommandationsPage() {
 
       <main className="container max-w-3xl mx-auto px-4 py-6">
         <Tabs defaultValue="esc">
-          <TabsList className="grid grid-cols-4 w-full h-auto">
-            <TabsTrigger value="esc" className="text-xs">ESC 2026</TabsTrigger>
-            <TabsTrigger value="acc" className="text-xs">ACC / AHA</TabsTrigger>
-            <TabsTrigger value="epi" className="text-xs">Épidémiologie</TabsTrigger>
-            <TabsTrigger value="prono" className="text-xs">Pronostic</TabsTrigger>
+          <TabsList className="grid grid-cols-5 w-full h-auto">
+            <TabsTrigger value="esc" className="text-[11px] px-1">ESC 2026</TabsTrigger>
+            <TabsTrigger value="acc" className="text-[11px] px-1">ACC/AHA</TabsTrigger>
+            <TabsTrigger value="hfpef" className="text-[11px] px-1">ICFEp 2026</TabsTrigger>
+            <TabsTrigger value="epi" className="text-[11px] px-1">Épidémio</TabsTrigger>
+            <TabsTrigger value="prono" className="text-[11px] px-1">Pronostic</TabsTrigger>
           </TabsList>
 
           {/* ---------------- ESC 2026 ---------------- */}
@@ -98,13 +100,147 @@ export default function RecommandationsPage() {
               </ul>
             </Block>
             <Block title="ECDP ACC 2026 – ICFEp" badge="ACC 2026">
-              <ul className="list-disc pl-4 space-y-1">
-                <Fact>Intègre les essais favorables des <strong>iSGLT2</strong>, des <strong>ARM non stéroïdiens</strong> et des <strong>thérapies à base d'incrétines</strong> dans la prise en charge de l'ICFEp.</Fact>
-              </ul>
+              <p className="text-sm text-slate-700">
+                Mise à jour de l'ECDP 2023, alignée sur la guideline AHA/ACC/HFSA 2022. Détail dans l'onglet <strong>ICFEp 2026</strong> (diagnostic, scores, traitement, doses).
+              </p>
             </Block>
             <Button asChild variant="outline" className="w-full">
               <a href="https://www.jacc.org/doi/10.1016/j.jacc.2026.06.018" target="_blank" rel="noopener noreferrer">
                 ECDP ACC 2026 ICFEp <ExternalLink className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </TabsContent>
+
+          {/* ---------------- ICFEp ACC 2026 ---------------- */}
+          <TabsContent value="hfpef" className="space-y-4 mt-4">
+            <p className="text-xs text-muted-foreground bg-blue-50 border border-blue-100 rounded p-2">
+              Source : Kittleson MM et al. <em>Management of HFpEF: 2026 ACC Expert Consensus Decision Pathway</em>, JACC 2026 (doi:10.1016/j.jacc.2026.06.018). Document ambulatoire ; ICFEp = FEVG ≥ 50 %. Ne remplace pas le jugement clinique.
+            </p>
+
+            <Block title="Diagnostic" badge="ACC 2026">
+              <ul className="list-disc pl-4 space-y-1">
+                <Fact>Définition universelle : symptômes/signes d'IC d'origine cardiaque structurelle ou fonctionnelle <strong>et</strong> ≥ 1 de : peptides natriurétiques élevés, ou preuve objective de congestion cardiogénique.</Fact>
+                <Fact>Aucun test unique n'est définitif ; <strong>les peptides natriurétiques peuvent être normaux</strong> (obésité, sexe masculin, origine, résistance à l'insuline) : une valeur normale n'exclut pas l'ICFEp.</Fact>
+                <Fact><strong>Stratégie</strong> : H₂FPEF en dépistage, puis HFA-PEFF pour confirmer ; si discordance, examens avancés. En pratique, un <strong>essai thérapeutique</strong> du traitement optimal est raisonnable si test d'effort diastolique/hémodynamique non disponibles.</Fact>
+                <Fact>HFpEF-ABA : dépistage en soins primaires (âge, IMC, FA), sans échocardiographie.</Fact>
+                <Fact>Un score bas avec forte probabilité clinique impose un bilan complémentaire ; beaucoup de patients tombent en zone « intermédiaire ».</Fact>
+              </ul>
+            </Block>
+
+            <Card className="shadow-sm">
+              <CardHeader className="pb-2"><CardTitle className="text-base">Score H₂FPEF</CardTitle>
+                <CardDescription>Obésité 2 · HTA 1 · FA 3 · HTP 1 · Âge 1 · Pressions de remplissage 1</CardDescription></CardHeader>
+              <CardContent><H2fpefCalculator /></CardContent>
+            </Card>
+            <Card className="shadow-sm">
+              <CardHeader className="pb-2"><CardTitle className="text-base">Score HFpEF-ABA</CardTitle>
+                <CardDescription>Âge · IMC · Fibrillation atriale</CardDescription></CardHeader>
+              <CardContent><HfpefAbaCalculator /></CardContent>
+            </Card>
+
+            <Block title="Diagnostics différentiels (mimics)">
+              <ul className="list-disc pl-4 space-y-1">
+                <Fact><strong>Non cardiaques</strong> : pathologie pulmonaire (EFR, imagerie, cathétérisme droit), maladie rénale, états à haut débit (anémie, hépatopathie, hyperthyroïdie, fistule AV), obésité (IC masquée jusqu'à 40 % en population, jusqu'à 70 % en population adressée), fragilité / déconditionnement.</Fact>
+                <Fact><strong>Cardiaques</strong> : valvulopathies (sténose aortique, IM, RM), constriction péricardique, cardiomyopathies infiltrantes/restrictives (<strong>amylose</strong> – dépistage protéine monoclonale + scintigraphie, sarcoïdose, hémochromatose, Fabry), cardiomyopathie hypertrophique et phénocopies, cardiopathie ischémique / dysfonction microvasculaire.</Fact>
+                <Fact>L'ICFEp est un diagnostic d'exclusion ; ne pas manquer les mimics qui ont un traitement spécifique (amylose TTR, etc.).</Fact>
+              </ul>
+            </Block>
+
+            <Block title="Spécificités chez la femme">
+              <ul className="list-disc pl-4 space-y-1">
+                <Fact>ICFEp plus fréquente que l'ICFEr ; plus âgées, dyspnée et qualité de vie plus altérées ; risque attribuable plus élevé de l'HTA, du diabète de type 2 et de l'obésité.</Fact>
+                <Fact>Facteurs propres : troubles hypertensifs de la grossesse, diabète gestationnel, infertilité, ménopause précoce.</Fact>
+                <Fact>Peptides natriurétiques physiologiquement plus élevés, mais plus bas que chez l'homme en cas d'ICFEp (surtout adiposité centrale) ; remodelage concentrique, FEVG plus élevée.</Fact>
+              </ul>
+            </Block>
+
+            <Block title="Traitement médical optimal" badge="Fig. 6 – ACC 2026">
+              <ul className="list-disc pl-4 space-y-1">
+                <Fact><strong>Base</strong> : <strong>iSGLT2</strong> (pierre angulaire) + <strong>ARM non stéroïdien</strong> (finérénone), sauf contre-indication → ↓ décès CV et hospitalisations pour IC, amélioration de l'état de santé.</Fact>
+                <Fact><strong>iSGLT2</strong> : dapagliflozine ou empagliflozine 10 mg/j (DELIVER, EMPEROR-Preserved) ; possible dès la phase hospitalière ; sotagliflozine : bénéfice seulement chez le diabétique de type 2 récemment hospitalisé.</Fact>
+                <Fact><strong>ARM</strong> : la <strong>finérénone est le choix privilégié</strong> (FINEARTS-HF, FDA juillet 2025 pour FEVG ≥ 40 %) ; spironolactone = alternative raisonnable si coût/tolérance (TOPCAT : bénéfice en Amérique du Nord) ; éplérénone non étudiée dans l'ICFEp (alternative si gynécomastie). SPIRIT-HF (résumé) : pas de bénéfice net, davantage d'hypotension et d'hyperkaliémie.</Fact>
+                <Fact><strong>Incrétines</strong> si IMC ≥ 30 : sémaglutide (FEVG ≥ 45 %) ou tirzépatide (FEVG ≥ 50 %) → amélioration des symptômes, de la capacité à l'effort et possible réduction des événements d'IC ; perte de poids ≈ 11-13 % à 1 an. À associer à exercice et soutien nutritionnel (risque d'obésité sarcopénique).</Fact>
+                <Fact><strong>ARNI</strong> (sacubitril/valsartan) : raisonnable chez la femme ou si FEVG &lt; 57 % (bénéfice sur les hospitalisations dans PARAGON-HF), surtout si contrôle tensionnel supplémentaire utile ; sinon <strong>ARA2</strong> (candésartan, CHARM-Preserved) en alternative, notamment chez l'hypertendu. <strong>Pas d'IEC</strong> (PEP-CHF).</Fact>
+                <Fact><strong>Diurétiques de l'anse</strong> à la dose minimale efficace. <strong>Bêtabloquants</strong> : aucun bénéfice démontré, parfois mal tolérés (incompétence chronotrope) → limiter aux indications (angor, contrôle de fréquence de FA), à la dose minimale.</Fact>
+                <Fact>Initier et titrer précocement ; l'initiation précoce réduit hospitalisations et décès (STRONG-HF).</Fact>
+              </ul>
+            </Block>
+
+            <Block title="Doses de départ et cibles" badge="Tableau 4">
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead><tr className="text-left border-b"><th className="py-1 pr-2">Molécule</th><th className="pr-2">Départ</th><th>Cible</th></tr></thead>
+                  <tbody className="[&_td]:py-1 [&_td]:pr-2 [&_tr]:border-b">
+                    <tr><td>Dapagliflozine</td><td>10 mg/j</td><td>10 mg/j</td></tr>
+                    <tr><td>Empagliflozine</td><td>10 mg/j</td><td>10 mg/j</td></tr>
+                    <tr><td>Sotagliflozine*</td><td>200 mg/j</td><td>400 mg/j</td></tr>
+                    <tr><td>Spironolactone</td><td>25 mg/j</td><td>50 mg/j</td></tr>
+                    <tr><td>Finérénone (DFG 25-&lt;60)</td><td>10 mg/j</td><td>20 mg/j</td></tr>
+                    <tr><td>Finérénone (DFG ≥ 60)</td><td>20 mg/j</td><td>40 mg/j</td></tr>
+                    <tr><td>Sémaglutide (SC)</td><td>0,25 mg/sem</td><td>2,4 mg/sem</td></tr>
+                    <tr><td>Tirzépatide (SC)</td><td>2,5 mg/sem</td><td>15 mg/sem</td></tr>
+                    <tr><td>Sacubitril/valsartan</td><td>24/26 mg ×2/j</td><td>97/103 mg ×2/j</td></tr>
+                    <tr><td>Candésartan</td><td>4-8 mg/j</td><td>32 mg/j</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                *Sotagliflozine : bénéfice démontré seulement chez le diabétique de type 2 récemment hospitalisé. Titration incrétines (toutes les 4 sem. si toléré) : sémaglutide 0,25 → 0,5 → 1,0 → 1,7 → 2,4 mg ; tirzépatide 2,5 → 5 → 7,5 → 10 → 12,5 → 15 mg.
+              </p>
+            </Block>
+
+            <Block title="Contre-indications et précautions" badge="Tableau 5">
+              <ul className="list-disc pl-4 space-y-1">
+                <Fact><strong>iSGLT2</strong> : CI diabète de type 1, grossesse, allaitement ; prudence DFG &lt; 25 (dapagliflozine) / &lt; 20 (empagliflozine), mycoses et infections urinaires, hypovolémie/hypotension, acidocétose, IRA, gangrène de Fournier (rare).</Fact>
+                <Fact><strong>Spironolactone</strong> : CI K⁺ ≥ 5,0 mmol/L, DFG &lt; 30 ou créatinine ≥ 2,5 mg/dL, Addison, grossesse ; prudence si autres médicaments hyperkaliémiants (suppléments de K⁺, IEC/ARA2/ARNI, AINS, triméthoprime).</Fact>
+                <Fact><strong>Finérénone</strong> : CI DFG &lt; 25, K⁺ ≥ 5,0, inhibiteurs/inducteurs forts ou modérés du CYP3A4, Addison, grossesse.</Fact>
+                <Fact><strong>Incrétines</strong> : CI ATCD personnel/familial de cancer médullaire de la thyroïde ou NEM2, grossesse, allaitement ; prudence : effets digestifs sévères, gastroparésie, maladie biliaire aiguë, pancréatite aiguë, hypoglycémie sous insuline/sulfamide, aspiration à l'anesthésie.</Fact>
+                <Fact><strong>ARNI</strong> : CI association à un IEC (délai 36 h), ATCD d'angioedème, grossesse, insuffisance hépatique sévère (Child-Pugh C) ; dose de départ réduite de moitié si pas d'IEC/ARA2 ou faible dose, DFG &lt; 30, Child-Pugh B, sténose de l'artère rénale, hypotension.</Fact>
+              </ul>
+            </Block>
+
+            <Block title="Prise en charge non médicamenteuse">
+              <ul className="list-disc pl-4 space-y-1">
+                <Fact><strong>Exercice</strong> : améliore capacité à l'effort et qualité de vie (3-4 mois : HIIT, entraînement continu modéré, aérobie + résistance, ou +2 000 pas/jour) ; pas de preuve sur hospitalisations/décès ; soutenir l'adhésion.</Fact>
+                <Fact><strong>Obésité</strong> : restriction calorique ± exercice (effets additifs sur la capacité à l'effort), incrétines, chirurgie bariatrique à considérer ; distinguer de la perte de poids involontaire (fragilité, cachexie), de mauvais pronostic.</Fact>
+                <Fact><strong>Moniteur de pression artérielle pulmonaire implantable</strong> (CardioMEMS, Cordella) : réduit les hospitalisations dans certains essais (CHAMPION, MONITOR-HF) ; à envisager si ≥ 1 hospitalisation et NYHA III persistante sous traitement optimal, volémie labile, syndrome cardio-rénal, ou comorbidités rendant le diagnostic difficile ; en centre capable de suivre les données.</Fact>
+                <Fact><strong>Autres dispositifs</strong> (shunts interatriaux, ablation du nerf splanchnique, stimulation) : bénéfice non établi ; shunt : plus d'événements CV dans RELIEVE-HF.</Fact>
+              </ul>
+            </Block>
+
+            <Block title="Comorbidités (approche cardio-rénale-métabolique)">
+              <ul className="list-disc pl-4 space-y-1">
+                <Fact><strong>Coronaropathie</strong> (&gt; 50 % des ICFEp) : prévention secondaire (statine haute intensité, antiplaquettaire, PA) ; iSGLT2 ou aGLP-1 si diabète de type 2.</Fact>
+                <Fact><strong>FA</strong> (jusqu'à 41 %) : contrôle du rythme / ablation possible si symptômes liés à la FA ; contrôle de fréquence prudent (incompétence chronotrope) ; iSGLT2 et aGLP-1 réduisent l'incidence/la charge de FA.</Fact>
+                <Fact><strong>HTA</strong> (jusqu'à 90 %) : <strong>PAS cible 120-129 mmHg</strong> (PAS ≥ 140 et &lt; 120 associées à plus d'événements) ; ARNI ou ARA2 = options pragmatiques.</Fact>
+                <Fact><strong>IRC</strong> (jusqu'à 60 %) : IRS (IEC/ARA2), iSGLT2, ARM non stéroïdien, aGLP-1 ralentissent la progression rénale.</Fact>
+                <Fact><strong>Diabète de type 2</strong> (jusqu'à 50 %) : remplacer les agents sans bénéfice cardiaque (sulfamides) par iSGLT2/aGLP-1 ; <strong>éviter saxagliptine, alogliptine et thiazolidinediones</strong> (↑ événements d'IC).</Fact>
+                <Fact><strong>Obésité</strong> (jusqu'à 80 %) : approche multidisciplinaire (nutrition, exercice, incrétines, chirurgie bariatrique).</Fact>
+                <Fact>Le cumul de comorbidités cardio-métaboliques augmente le risque d'hospitalisation (+23 % pour une seule sévère, +57 % pour 2-3).</Fact>
+              </ul>
+            </Block>
+
+            <Block title="Essais pivots (ICFEp)" badge="Tableau 3">
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead><tr className="text-left border-b"><th className="py-1 pr-2">Essai</th><th className="pr-2">Agent</th><th>Critère principal (HR)</th></tr></thead>
+                  <tbody className="[&_td]:py-1 [&_td]:pr-2 [&_tr]:border-b">
+                    <tr><td>DELIVER</td><td>Dapagliflozine</td><td>0,82 (0,73-0,92)</td></tr>
+                    <tr><td>EMPEROR-Preserved</td><td>Empagliflozine</td><td>0,79 (0,69-0,90)</td></tr>
+                    <tr><td>FINEARTS-HF</td><td>Finérénone</td><td>0,82 (0,71-0,94)</td></tr>
+                    <tr><td>TOPCAT</td><td>Spironolactone</td><td>0,89 (0,77-1,04)</td></tr>
+                    <tr><td>PARAGON-HF</td><td>Sacubitril/valsartan</td><td>0,87 (0,75-1,01)</td></tr>
+                    <tr><td>CHARM-Preserved</td><td>Candésartan</td><td>0,86 (0,74-1,00)</td></tr>
+                    <tr><td>SUMMIT</td><td>Tirzépatide</td><td>0,62 (0,41-0,95)</td></tr>
+                    <tr><td>STEP-HFpEF</td><td>Sémaglutide</td><td>KCCQ-CSS +7,8 pts ; poids −10,7 %</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </Block>
+
+            <Button asChild variant="outline" className="w-full">
+              <a href="https://www.jacc.org/doi/10.1016/j.jacc.2026.06.018" target="_blank" rel="noopener noreferrer">
+                ECDP ACC 2026 ICFEp (texte complet) <ExternalLink className="ml-2 h-4 w-4" />
               </a>
             </Button>
           </TabsContent>
