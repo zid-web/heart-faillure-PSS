@@ -100,10 +100,9 @@ export function EducationModule() {
                                 </div>
                                 <Accordion type="single" collapsible>
                                     <AccordionItem value="types">
-                                        <AccordionTrigger>Les 4 Types (FEVG)</AccordionTrigger>
+                                        <AccordionTrigger>Les 2 Types (FEVG) — ESC 2026</AccordionTrigger>
                                         <AccordionContent className="text-sm text-slate-600 space-y-2">
-                                            <p><strong>ICFEr (Réduite &lt;40%) :</strong> La pompe est faible.</p>
-                                            <p><strong>ICFEmr (Modérément Réduite 41-49%) :</strong> Zone grise.</p>
+                                            <p><strong>ICFEr (Réduite &lt;50%) :</strong> La pompe est affaiblie (la catégorie « modérément réduite » 41-49% a été supprimée en 2026).</p>
                                             <p><strong>ICFEp (Préservée ≥50%) :</strong> La pompe est raide (remplissage difficile).</p>
                                         </AccordionContent>
                                     </AccordionItem>

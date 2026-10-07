@@ -414,7 +414,7 @@ export default function TitrationPage() {
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
                 <p>
-                  Ce protocole de titration suit les recommandations ESC 2024 pour le traitement de l'insuffisance
+                  Ce protocole de titration suit les recommandations ESC 2026 pour le traitement de l'insuffisance
                   cardiaque. Les doses doivent être adaptées selon la tolérance individuelle et les paramètres cliniques
                   du patient.
                 </p>

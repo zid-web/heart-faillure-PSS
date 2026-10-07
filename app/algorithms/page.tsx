@@ -85,7 +85,7 @@ export default function AlgorithmsPage() {
         <div className="flex justify-between items-center mb-1">
           <h1 className="font-bold text-lg text-slate-800 flex items-center gap-2">
             <Activity className="h-5 w-5 text-blue-600" />
-            Guide Interactif ESC 2023
+            Guide Interactif ESC 2026
           </h1>
           <Badge variant="outline" className="text-xs">
             Step {step}/3
@@ -246,7 +246,7 @@ export default function AlgorithmsPage() {
             {/* 3. ARM (MRA) */}
             {renderRichCartridge(
               "3. ARM (Spironolactone/Eplerenone)",
-              "Classe I-A | Indispensable si FEVG ≤ 35%",
+              "ESC 2026 : Classe I, quelle que soit la FEVG (ICFEr et ICFEp) | ACC : I si FEVG ≤ 40%",
               <div className="space-y-2 pt-2">
                 <ul className="list-disc pl-4 space-y-1 text-xs">
                   <li><strong>Dose :</strong> Départ 25mg → Cible 50mg.</li>
@@ -268,7 +268,7 @@ export default function AlgorithmsPage() {
                 <ul className="list-disc pl-4 space-y-1 text-xs">
                   <li><strong>Dapagliflozine / Empagliflozine :</strong> 10mg x1/j.</li>
                   <li>Pas de titration nécessaire !</li>
-                  <li>Efficace FEVG réduite ET préservée.</li>
+                  <li>Efficace FEVG réduite ET préservée (ESC 2026 : initiation hospitalière post-stabilisation).</li>
                   <li>Hygiène périnéale recommandée.</li>
                 </ul>
               </div>,
@@ -347,9 +347,9 @@ export default function AlgorithmsPage() {
 
             <div className="pt-4 pb-8 space-y-4">
               <div className="bg-slate-100 rounded-lg p-4 text-center">
-                <h4 className="font-bold text-slate-800 mb-1">Résumé ESC 2023</h4>
+                <h4 className="font-bold text-slate-800 mb-1">Résumé ESC 2026</h4>
                 <p className="text-xs text-slate-600">
-                  HFrEF = 4 Piliers d'emblée + Diurétiques si congestion.<br />
+                  ICFEr (FEVG &lt; 50 %) = 4 piliers (traitement médical fondamental) d'emblée + diurétiques si congestion.<br />ICFEp (≥ 50 %) = iSGLT2 + ARM ; GLP-1 / tirzepatide si obésité (IIa) ; PA &lt; 130 mmHg.<br />
                   Traitement intensif et rapide (Fast initiation).
                 </p>
               </div>

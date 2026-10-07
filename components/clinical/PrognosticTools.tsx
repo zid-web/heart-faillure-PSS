@@ -8,6 +8,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Calculator, ArrowRight, AlertTriangle, CheckCircle2 } from "lucide-react"
+import { shfm, shfmRiskBand, type ShfmDevice } from "@/lib/shfm"
 
 // --- 1. SICA Score Calculator (Phase 1) ---
 // Simplified SICA (Score Insuffisance Cardiaque Aiguë) for rapid triage
@@ -105,7 +106,7 @@ export function SicaCalculator() {
 
                 <div className="space-y-3">
                     <div className="bg-white/60 p-2 rounded text-xs">
-                        <strong>Conformité ESC 2023 :</strong> {status.compliance}
+                        <strong>Conformité ESC 2026 :</strong> {status.compliance}
                     </div>
                     <div>
                         <strong className="text-xs uppercase">Actions Recommandées :</strong>
@@ -132,7 +133,7 @@ export function EssicCalculator() {
         const s = parseInt(sbp) || 120
         const b = parseInt(bun) || 20
         const n = parseInt(na) || 135
-        // Dummy logic inspired by OPTIMIZE-HF/GWTG (Low SBP + High BUN + Low Na = High Risk)
+        // Logique simplifiée inspirée by OPTIMIZE-HF/GWTG (Low SBP + High BUN + Low Na = High Risk)
         let score = 0
         if (s < 100) score += 2
         if (b > 30) score += 1
@@ -359,7 +360,7 @@ export function MaggicCalculator() {
     const [nyha, setNyha] = useState("1")
 
     const calculateRisk = () => {
-        // Simplified proxy logic for demo purposes (real MAGGIC is complex regression)
+        // ⚠ Approximation indicative (PAS le score MAGGIC publié, régression complexe) — ne pas utiliser seule
         // Points: Age/10 + (40-EF)/10 + NYHA
         let points = 0
         if (age) points += parseInt(age) / 10
@@ -416,47 +417,161 @@ export function MaggicCalculator() {
     )
 }
 
-// --- 6. SHFM (Seattle Heart Failure Model) Simplified ---
+// --- 6. SHFM (Seattle Heart Failure Model) ---
+// Modèle complet (Levy 2006) : lib/shfm.ts. Critère pronostique à interpréter avec ESC 2026 / ACC.
+type NumField = { key: keyof ShfmForm; label: string; placeholder: string }
+interface ShfmForm {
+    age: string; weight: string; lvef: string; sbp: string; diuretic: string
+    hb: string; lympho: string; uric: string; na: string; chol: string
+}
+
+const SHFM_FIELDS: NumField[] = [
+    { key: "age", label: "Âge (ans)", placeholder: "65" },
+    { key: "weight", label: "Poids (kg)", placeholder: "80" },
+    { key: "lvef", label: "FEVG (%)", placeholder: "30" },
+    { key: "sbp", label: "TAS (mmHg)", placeholder: "115" },
+    { key: "diuretic", label: "Furosémide eq. (mg/j)", placeholder: "40" },
+    { key: "hb", label: "Hémoglobine (g/dL)", placeholder: "13" },
+    { key: "lympho", label: "Lymphocytes (%)", placeholder: "22" },
+    { key: "uric", label: "Acide urique (mg/dL)", placeholder: "7" },
+    { key: "na", label: "Sodium (mmol/L)", placeholder: "138" },
+    { key: "chol", label: "Cholestérol total (mg/dL)", placeholder: "180" },
+]
+
 export function ShfmCalculator() {
-    const [diuretic, setDiuretic] = useState("0") // dose equivalent
-    const [nyha, setNyha] = useState("1")
-    const [device, setDevice] = useState("none")
+    const [f, setF] = useState<ShfmForm>({
+        age: "", weight: "", lvef: "", sbp: "", diuretic: "0",
+        hb: "", lympho: "", uric: "", na: "", chol: "",
+    })
+    const [male, setMale] = useState(true)
+    const [nyha, setNyha] = useState("2")
+    const [ischemic, setIschemic] = useState(false)
+    const [flags, setFlags] = useState<string[]>([])
+    const [device, setDevice] = useState<ShfmDevice>("none")
+
+    const toggle = (k: string) =>
+        setFlags(p => (p.includes(k) ? p.filter(x => x !== k) : [...p, k]))
+
+    const n = (v: string) => parseFloat(v.replace(",", "."))
+    const missing = SHFM_FIELDS.filter(x => x.key !== "diuretic" && !(n(f[x.key]) > 0))
+    const result = missing.length === 0
+        ? shfm({
+            age: n(f.age), male, nyha: parseInt(nyha) as 1 | 2 | 3 | 4, lvef: n(f.lvef),
+            ischemic, sbp: n(f.sbp), diureticMgDay: n(f.diuretic) || 0, weightKg: n(f.weight),
+            allopurinol: flags.includes("allopurinol"), statin: flags.includes("statin"),
+            hemoglobin: n(f.hb), lymphocytePct: n(f.lympho), uricAcid: n(f.uric),
+            sodium: n(f.na), cholesterol: n(f.chol),
+            acei: flags.includes("acei"), arb: flags.includes("arb"),
+            betaBlocker: flags.includes("bb"), aldosteroneAntagonist: flags.includes("mra"),
+            device,
+        })
+        : null
+    const band = result ? shfmRiskBand(result.survival1y) : null
+    const pct = (x: number) => `${Math.round(x * 100)} %`
+
+    const treatments = [
+        { id: "acei", label: "IEC" }, { id: "arb", label: "ARA2 (si pas d'IEC)" },
+        { id: "bb", label: "Bêta-bloquant" }, { id: "mra", label: "ARM" },
+        { id: "statin", label: "Statine" }, { id: "allopurinol", label: "Allopurinol" },
+    ]
 
     return (
         <div className="space-y-4">
-            <p className="text-xs text-muted-foreground p-2 bg-yellow-50 rounded border border-yellow-100">
-                Estimateur simplifié de survie.
+            <p className="text-xs text-amber-900 p-2 bg-amber-50 rounded border border-amber-200">
+                Seattle Heart Failure Model (Levy 2006). Critère pronostique complémentaire :
+                modèle antérieur aux iSGLT2, ARNI et finérénone — il <strong>sous-estime la survie</strong> sous
+                traitement moderne (ESC 2026 / ACC). À confronter au calculateur officiel et au jugement clinique.
             </p>
-            <div className="space-y-2">
-                <Label className="text-xs">Dose Diurétique (Furosemide eq.)</Label>
-                <Select value={diuretic} onValueChange={setDiuretic}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="0">Aucun / Faible (&lt;40mg)</SelectItem>
-                        <SelectItem value="1">Moyenne (40-80mg)</SelectItem>
-                        <SelectItem value="2">Élevée (&gt;80mg)</SelectItem>
-                    </SelectContent>
-                </Select>
+            <div className="grid grid-cols-2 gap-3">
+                {SHFM_FIELDS.map(x => (
+                    <div key={x.key} className="space-y-1">
+                        <Label className="text-xs">{x.label}</Label>
+                        <Input type="number" inputMode="decimal" placeholder={x.placeholder}
+                            value={f[x.key]} onChange={e => setF({ ...f, [x.key]: e.target.value })} />
+                    </div>
+                ))}
             </div>
-            <div className="space-y-2">
-                <Label className="text-xs">Devices</Label>
-                <Select value={device} onValueChange={setDevice}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="none">Aucun</SelectItem>
-                        <SelectItem value="icd">DAI (Défibrillateur)</SelectItem>
-                        <SelectItem value="crt">CRT (Resynchronisation)</SelectItem>
-                    </SelectContent>
-                </Select>
+            <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                    <Label className="text-xs">Sexe</Label>
+                    <Select value={male ? "m" : "f"} onValueChange={v => setMale(v === "m")}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="m">Homme</SelectItem>
+                            <SelectItem value="f">Femme</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-1">
+                    <Label className="text-xs">Classe NYHA</Label>
+                    <Select value={nyha} onValueChange={setNyha}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {["I", "II", "III", "IV"].map((r, i) => (
+                                <SelectItem key={r} value={String(i + 1)}>{r}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-1">
+                    <Label className="text-xs">Étiologie</Label>
+                    <Select value={ischemic ? "i" : "n"} onValueChange={v => setIschemic(v === "i")}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="i">Ischémique</SelectItem>
+                            <SelectItem value="n">Non ischémique</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-1">
+                    <Label className="text-xs">Dispositif</Label>
+                    <Select value={device} onValueChange={v => setDevice(v as ShfmDevice)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="none">Aucun</SelectItem>
+                            <SelectItem value="icd">DAI</SelectItem>
+                            <SelectItem value="crt">CRT-P</SelectItem>
+                            <SelectItem value="crtD">CRT-D</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+                {treatments.map(t => (
+                    <div key={t.id} onClick={() => toggle(t.id)}
+                        className={`p-2 rounded-md border cursor-pointer text-xs font-medium flex justify-between
+                        ${flags.includes(t.id) ? "border-blue-500 bg-blue-50" : "border-slate-200"}`}>
+                        {t.label}
+                        {flags.includes(t.id) && <CheckCircle2 className="h-4 w-4 text-blue-600" />}
+                    </div>
+                ))}
             </div>
 
-            <div className="p-4 rounded-lg bg-blue-50 text-center text-blue-900">
-                <p className="text-xs font-bold uppercase">Espérance de vie estimée</p>
-                <p className="text-lg font-bold">
-                    {device === "none" && diuretic === "2" ? "Critique (< 2 ans)" :
-                        device !== "none" ? "Améliorée (+2-5 ans)" : "Standard (adapté âge)"}
-                </p>
-            </div>
+            {result ? (
+                <div className={`p-4 rounded-lg text-center border-2 ${band === "high" ? "bg-red-50 border-red-200 text-red-900" : band === "intermediate" ? "bg-orange-50 border-orange-200 text-orange-900" : "bg-green-50 border-green-200 text-green-900"}`}>
+                    <p className="text-xs font-bold uppercase">Survie estimée (SHFM)</p>
+                    <div className="grid grid-cols-3 gap-2 mt-2">
+                        {[["1 an", result.survival1y], ["2 ans", result.survival2y], ["5 ans", result.survival5y]].map(([l, v]) => (
+                            <div key={l as string}>
+                                <p className="text-2xl font-bold">{pct(v as number)}</p>
+                                <p className="text-[10px] uppercase">{l as string}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <p className="text-xs mt-2">
+                        Espérance de vie moyenne : {result.meanLifeExpectancyYears.toFixed(1)} ans · Score {result.score.toFixed(2)}
+                    </p>
+                    {band === "high" && (
+                        <p className="text-xs font-bold mt-2">
+                            Survie à 1 an &lt; 80 % : discuter filière insuffisance cardiaque avancée (stade D / ESC 2026).
+                        </p>
+                    )}
+                </div>
+            ) : (
+                <div className="p-3 rounded-lg bg-slate-100 text-center text-xs text-slate-600">
+                    Renseignez : {missing.map(m => m.label).join(", ")}
+                </div>
+            )}
         </div>
     )
 }
