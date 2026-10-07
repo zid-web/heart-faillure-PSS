@@ -332,7 +332,7 @@ export default function ParcoursPage() {
                   <CalculatorTrigger title="MAGGIC Score" icon={Calculator}>
                     <MaggicCalculator />
                   </CalculatorTrigger>
-                  <CalculatorTrigger title="Seattle HF Model" icon={Activity} wide>
+                  <CalculatorTrigger title="Seattle HF Model" icon={Activity}>
                     <ShfmCalculator />
                   </CalculatorTrigger>
                 </div>
