@@ -417,28 +417,27 @@ export function MaggicCalculator() {
 }
 
 // --- 6. SHFM (Seattle Heart Failure Model) ---
-// Calculateur officiel de l'Université de Washington, intégré tel quel (aucun coefficient recopié).
+// Calculateur officiel de l'Université de Washington (aucun coefficient recopié).
+// Ouvert dans un nouvel onglet : le site officiel peut refuser l'affichage en iframe (page vide).
 export const SHFM_OFFICIAL_URL = "https://depts.washington.edu/shfm/app.php?width=1440&height=900"
 
 export function ShfmCalculator() {
     return (
         <div className="space-y-3">
             <p className="text-xs text-amber-900 p-2 bg-amber-50 rounded border border-amber-200">
-                Calculateur officiel Seattle Heart Failure Model (Univ. Washington). Modèle de 2006, antérieur aux
-                iSGLT2, ARNI et finérénone : il peut sous-estimer la survie sous traitement moderne (ESC 2026 / ACC).
+                Seattle Heart Failure Model (Univ. Washington) : survie à 1, 2 et 5 ans à partir de l'âge, du sexe,
+                de la NYHA, de la FEVG, de l'étiologie, de la PAS, du diurétique, de l'Hb, des lymphocytes, de l'acide
+                urique, du sodium, du cholestérol, des traitements et dispositifs.
             </p>
-            <iframe
-                src={SHFM_OFFICIAL_URL}
-                title="Seattle Heart Failure Model"
-                className="w-full h-[65vh] rounded border bg-white"
-                loading="lazy"
-                referrerPolicy="no-referrer"
-            />
-            <Button asChild variant="outline" className="w-full">
+            <Button asChild className="w-full h-12">
                 <a href={SHFM_OFFICIAL_URL} target="_blank" rel="noopener noreferrer">
-                    Ouvrir dans un nouvel onglet (si l'affichage intégré est bloqué)
+                    Ouvrir le calculateur SHFM officiel
                 </a>
             </Button>
+            <p className="text-[11px] text-muted-foreground">
+                Modèle de 2006, antérieur aux iSGLT2, ARNI et finérénone : il peut sous-estimer la survie sous traitement
+                moderne (ESC 2026 / ACC). À interpréter avec le jugement clinique.
+            </p>
         </div>
     )
 }

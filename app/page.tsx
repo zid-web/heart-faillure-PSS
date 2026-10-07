@@ -109,10 +109,10 @@ export default function DashboardPage() {
                   badge="ESC / ACC 2026"
                 />
                 <QuickAction
-                  title="Recommandations ESC"
-                  description="Protocoles thérapeutiques basés sur les dernières guidelines européennes"
+                  title="Recommandations ESC 2026 / ACC"
+                  description="Classification, nouveautés thérapeutiques, épidémiologie et facteurs de risque (cours ACCSAP)"
                   icon={BookOpen}
-                  href="/algorithms"
+                  href="/recommandations"
                   gradient="bg-gradient-to-br from-blue-500 to-blue-700"
                   badge="Mis à jour"
                 />
@@ -211,11 +211,11 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <DashboardCard
                   title="Guidelines ESC / ACC 2026"
-                  description="ESC 2026 : ICFEr (FEVG &lt; 50 %) / ICFEp, stades A-D ; ACC 2022 et ECDP HFpEF 2026"
+                  description="ESC 2026 : ICFEr (FEVG < 50 %) / ICFEp, stades A-D ; ACC/AHA 2022, ECDP ACC 2026 et cours ACCSAP"
                   icon={BookOpen}
-                  href="/algorithms"
+                  href="/recommandations"
                   variant="primary"
-                  badge="2023"
+                  badge="2026"
                 />
                 <DashboardCard
                   title="Algorithmes décisionnels"

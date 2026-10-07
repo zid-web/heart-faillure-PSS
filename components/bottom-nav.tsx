@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Map, Activity, Settings, Calculator } from "lucide-react"
+import { Home, Map, Activity, Settings, Calculator, BookOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function BottomNav() {
@@ -23,6 +23,11 @@ export function BottomNav() {
       label: "Algos",
       href: "/algorithms",
       icon: Activity,
+    },
+    {
+      label: "Savoirs",
+      href: "/recommandations",
+      icon: BookOpen,
     },
     {
       label: "Calculs",
