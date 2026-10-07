@@ -93,7 +93,7 @@ function ContactChip({ role, name, phone }: { role: string; name: string; phone:
   )
 }
 
-function CalculatorTrigger({ title, icon: Icon, children }: { title: string; icon: any; children: React.ReactNode }) {
+function CalculatorTrigger({ title, icon: Icon, children, wide }: { title: string; icon: any; children: React.ReactNode; wide?: boolean }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -102,7 +102,7 @@ function CalculatorTrigger({ title, icon: Icon, children }: { title: string; ico
           <span className="text-xs font-bold text-center leading-tight">{title}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className={`${wide ? "max-w-3xl" : "max-w-md"} max-h-[90vh] overflow-y-auto`}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
@@ -332,7 +332,7 @@ export default function ParcoursPage() {
                   <CalculatorTrigger title="MAGGIC Score" icon={Calculator}>
                     <MaggicCalculator />
                   </CalculatorTrigger>
-                  <CalculatorTrigger title="Seattle HF Model" icon={Activity}>
+                  <CalculatorTrigger title="Seattle HF Model" icon={Activity} wide>
                     <ShfmCalculator />
                   </CalculatorTrigger>
                 </div>
