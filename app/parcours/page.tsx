@@ -93,7 +93,7 @@ function ContactChip({ role, name, phone }: { role: string; name: string; phone:
   )
 }
 
-function CalculatorTrigger({ title, icon: Icon, children }: { title: string; icon: any; children: React.ReactNode }) {
+function CalculatorTrigger({ title, icon: Icon, children, wide }: { title: string; icon: any; children: React.ReactNode; wide?: boolean }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -102,7 +102,7 @@ function CalculatorTrigger({ title, icon: Icon, children }: { title: string; ico
           <span className="text-xs font-bold text-center leading-tight">{title}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className={`${wide ? "max-w-3xl" : "max-w-md"} max-h-[90vh] overflow-y-auto`}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
@@ -165,7 +165,7 @@ export default function ParcoursPage() {
                   <Button variant="outline" className="h-auto py-2 flex flex-col gap-1" asChild>
                     <Link href="/algorithms">
                       <BookOpen className="h-5 w-5 text-blue-600" />
-                      <span className="text-xs">Guide ESC 23</span>
+                      <span className="text-xs">Guide ESC 2026</span>
                     </Link>
                   </Button>
                   <CalculatorTrigger title="Score SICA" icon={Calculator}>
@@ -243,7 +243,7 @@ export default function ParcoursPage() {
                   {/* SURVEILLANCE & OBJECTIFS */}
                   <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
                     <h5 className="text-xs font-bold text-blue-900 mb-2 flex items-center gap-1">
-                      <Activity className="h-3 w-3" /> Surveillance & Objectifs (ESC 2023)
+                      <Activity className="h-3 w-3" /> Surveillance & Objectifs (ESC 2026)
                     </h5>
                     <div className="grid grid-cols-1 gap-2 text-[11px] text-blue-800">
                       <div className="flex gap-2 items-start">
@@ -332,7 +332,7 @@ export default function ParcoursPage() {
                   <CalculatorTrigger title="MAGGIC Score" icon={Calculator}>
                     <MaggicCalculator />
                   </CalculatorTrigger>
-                  <CalculatorTrigger title="SHFM Score" icon={Activity}>
+                  <CalculatorTrigger title="Seattle HF Model" icon={Activity} wide>
                     <ShfmCalculator />
                   </CalculatorTrigger>
                 </div>

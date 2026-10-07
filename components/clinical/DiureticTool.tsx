@@ -89,7 +89,7 @@ export function DiureticTool() {
                     <h3 className="font-bold text-sm flex items-center gap-2">
                         <Syringe className="h-4 w-4" /> Protocole Diurétiques
                     </h3>
-                    <p className="text-[10px] text-indigo-100">Algorithme ESC 2021/2023</p>
+                    <p className="text-[10px] text-indigo-100">Algorithme ESC 2026</p>
                 </div>
             </div>
 

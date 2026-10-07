@@ -105,7 +105,7 @@ export function SicaCalculator() {
 
                 <div className="space-y-3">
                     <div className="bg-white/60 p-2 rounded text-xs">
-                        <strong>Conformité ESC 2023 :</strong> {status.compliance}
+                        <strong>Conformité ESC 2026 :</strong> {status.compliance}
                     </div>
                     <div>
                         <strong className="text-xs uppercase">Actions Recommandées :</strong>
@@ -132,7 +132,7 @@ export function EssicCalculator() {
         const s = parseInt(sbp) || 120
         const b = parseInt(bun) || 20
         const n = parseInt(na) || 135
-        // Dummy logic inspired by OPTIMIZE-HF/GWTG (Low SBP + High BUN + Low Na = High Risk)
+        // Logique simplifiée inspirée by OPTIMIZE-HF/GWTG (Low SBP + High BUN + Low Na = High Risk)
         let score = 0
         if (s < 100) score += 2
         if (b > 30) score += 1
@@ -359,7 +359,7 @@ export function MaggicCalculator() {
     const [nyha, setNyha] = useState("1")
 
     const calculateRisk = () => {
-        // Simplified proxy logic for demo purposes (real MAGGIC is complex regression)
+        // ⚠ Approximation indicative (PAS le score MAGGIC publié, régression complexe) — ne pas utiliser seule
         // Points: Age/10 + (40-EF)/10 + NYHA
         let points = 0
         if (age) points += parseInt(age) / 10
@@ -416,47 +416,29 @@ export function MaggicCalculator() {
     )
 }
 
-// --- 6. SHFM (Seattle Heart Failure Model) Simplified ---
+// --- 6. SHFM (Seattle Heart Failure Model) ---
+// Calculateur officiel de l'Université de Washington, intégré tel quel (aucun coefficient recopié).
+export const SHFM_OFFICIAL_URL = "https://depts.washington.edu/shfm/app.php?width=1440&height=900"
+
 export function ShfmCalculator() {
-    const [diuretic, setDiuretic] = useState("0") // dose equivalent
-    const [nyha, setNyha] = useState("1")
-    const [device, setDevice] = useState("none")
-
     return (
-        <div className="space-y-4">
-            <p className="text-xs text-muted-foreground p-2 bg-yellow-50 rounded border border-yellow-100">
-                Estimateur simplifié de survie.
+        <div className="space-y-3">
+            <p className="text-xs text-amber-900 p-2 bg-amber-50 rounded border border-amber-200">
+                Calculateur officiel Seattle Heart Failure Model (Univ. Washington). Modèle de 2006, antérieur aux
+                iSGLT2, ARNI et finérénone : il peut sous-estimer la survie sous traitement moderne (ESC 2026 / ACC).
             </p>
-            <div className="space-y-2">
-                <Label className="text-xs">Dose Diurétique (Furosemide eq.)</Label>
-                <Select value={diuretic} onValueChange={setDiuretic}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="0">Aucun / Faible (&lt;40mg)</SelectItem>
-                        <SelectItem value="1">Moyenne (40-80mg)</SelectItem>
-                        <SelectItem value="2">Élevée (&gt;80mg)</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="space-y-2">
-                <Label className="text-xs">Devices</Label>
-                <Select value={device} onValueChange={setDevice}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="none">Aucun</SelectItem>
-                        <SelectItem value="icd">DAI (Défibrillateur)</SelectItem>
-                        <SelectItem value="crt">CRT (Resynchronisation)</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-
-            <div className="p-4 rounded-lg bg-blue-50 text-center text-blue-900">
-                <p className="text-xs font-bold uppercase">Espérance de vie estimée</p>
-                <p className="text-lg font-bold">
-                    {device === "none" && diuretic === "2" ? "Critique (< 2 ans)" :
-                        device !== "none" ? "Améliorée (+2-5 ans)" : "Standard (adapté âge)"}
-                </p>
-            </div>
+            <iframe
+                src={SHFM_OFFICIAL_URL}
+                title="Seattle Heart Failure Model"
+                className="w-full h-[65vh] rounded border bg-white"
+                loading="lazy"
+                referrerPolicy="no-referrer"
+            />
+            <Button asChild variant="outline" className="w-full">
+                <a href={SHFM_OFFICIAL_URL} target="_blank" rel="noopener noreferrer">
+                    Ouvrir dans un nouvel onglet (si l'affichage intégré est bloqué)
+                </a>
+            </Button>
         </div>
     )
 }

@@ -47,12 +47,12 @@ export default function CalculatorPage() {
 
   const clinicalLinks = [
     {
-      title: "Directives ESC 2023",
-      url: "https://academic.oup.com/eurheartj/article/44/39/3916/7282519",
+      title: "Directives ESC 2026",
+      url: "https://doi.org/10.1093/eurheartj/ehag100",
       description: "Dernières recommandations ESC pour l'insuffisance cardiaque",
     },
     {
-      title: "Critères ACC/AHA",
+      title: "ACC/AHA 2022 + ECDP ACC 2026 (ICFEp)",
       url: "https://www.acc.org/",
       description: "Classification diagnostique ACC pour l'insuffisance cardiaque",
     },
@@ -285,7 +285,7 @@ export default function CalculatorPage() {
             <Card className="border-2 border-blue-300 bg-blue-50">
               <CardHeader>
                 <CardTitle className="text-blue-900">Calculateur BNP / proBNP</CardTitle>
-                <CardDescription>Interprétation du peptide natriurétique B selon ESC 2023</CardDescription>
+                <CardDescription>Interprétation du peptide natriurétique B selon ESC</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -322,7 +322,7 @@ export default function CalculatorPage() {
                 )}
 
                 <div className="rounded-lg bg-muted/50 p-4 text-sm text-muted-foreground">
-                  <p className="font-semibold">Valeurs de référence ESC 2023 :</p>
+                  <p className="font-semibold">Valeurs de référence ESC :</p>
                   <ul className="mt-2 space-y-1">
                     <li>• &lt; 35 pg/mL : Normal</li>
                     <li>• 35-100 pg/mL : Limite</li>
@@ -444,11 +444,11 @@ export default function CalculatorPage() {
                         {getACCDiagnosticScore().stage === "Stade A" &&
                           "Prévention : contrôle HTA, activité physique, alimentation saine"}
                         {getACCDiagnosticScore().stage === "Stade B" &&
-                          "Traitement de l'IC structurelle, surveillance régulière"}
+                          "IC structurelle : bêta-bloquant si FEVG < 50 % (ESC 2026), IEC/ARA2 selon contexte, PA cible < 130 mmHg"}
                         {getACCDiagnosticScore().stage === "Stade C" &&
-                          "Traitement optimal, hospitalisation si nécessaire"}
+                          "Traitement médical fondamental (ARNI/IEC, bêta-bloquant, ARM, iSGLT2) ; ARM + iSGLT2 aussi si FEVG ≥ 50 % ; hospitalisation si décompensation"}
                         {getACCDiagnosticScore().stage === "Stade D" &&
-                          "Avis cardiologique spécialisé, exploration des options avancées"}
+                          "Avis IC avancée : Seattle HF Model / MAGGIC, assistance, transplantation, soins palliatifs"}
                       </p>
                     </div>
                   </div>
@@ -460,6 +460,7 @@ export default function CalculatorPage() {
                   <p>• Stade B: IC structurelle asymptomatique</p>
                   <p>• Stade C: IC avec symptômes actuels/passés</p>
                   <p>• Stade D: IC réfractaire</p>
+                  <p className="pt-1">2026 (définition universelle AHA/ACC/ESC/WHF) : ICFEr, ICFEp, IC à FEVG améliorée. ESC 2026 : ICFEr = FEVG &lt; 50 %.</p>
                 </div>
               </CardContent>
             </Card>

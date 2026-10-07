@@ -34,7 +34,7 @@ export default function DashboardPage() {
               </p>
             </div>
             <Badge variant="outline" className="text-xs font-semibold">
-              ESC 2023
+              ESC / ACC 2026
             </Badge>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function DashboardPage() {
                   icon={Activity}
                   href="/parcours"
                   gradient="bg-gradient-to-br from-emerald-500 to-teal-600"
-                  badge="ESC 2023"
+                  badge="ESC / ACC 2026"
                 />
                 <QuickAction
                   title="Recommandations ESC"
@@ -181,9 +181,9 @@ export default function DashboardPage() {
                 />
                 <DashboardCard
                   title="Pronostic"
-                  description="Scores MAGGIC, BCN Bio-HF, Seattle Heart Failure Model"
+                  description="Seattle Heart Failure Model, MAGGIC (indicatif), BCN Bio-HF"
                   icon={Heart}
-                  href="/calculator"
+                  href="/parcours"
                   variant="danger"
                 />
                 <DashboardCard
@@ -210,8 +210,8 @@ export default function DashboardPage() {
               <h2 className="text-lg font-bold text-slate-900 mb-4">Ressources documentaires</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <DashboardCard
-                  title="Guidelines ESC 2023"
-                  description="Recommandations complètes sur l'insuffisance cardiaque HFrEF/HFmrEF/HFpEF"
+                  title="Guidelines ESC / ACC 2026"
+                  description="ESC 2026 : ICFEr (FEVG &lt; 50 %) / ICFEp, stades A-D ; ACC 2022 et ECDP HFpEF 2026"
                   icon={BookOpen}
                   href="/algorithms"
                   variant="primary"

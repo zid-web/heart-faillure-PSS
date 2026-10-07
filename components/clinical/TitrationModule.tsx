@@ -34,7 +34,7 @@ export function TitrationModule() {
                     <h3 className="font-bold text-sm flex items-center gap-2">
                         <TrendingUp className="h-4 w-4" /> Optimisation Thérapeutique
                     </h3>
-                    <p className="text-[10px] text-purple-100">Protocole de Titration ESC 2023</p>
+                    <p className="text-[10px] text-purple-100">Protocole de Titration ESC 2026</p>
                 </div>
             </div>
 
@@ -55,7 +55,7 @@ export function TitrationModule() {
                                 <Activity className="h-4 w-4" /> Quadruple Thérapie D'emblée
                             </h4>
                             <p className="text-xs text-purple-800 mb-3">
-                                Pour ICFEr (FEVG ≤ 40%). Débuter <strong>EN PARALLÈLE</strong> si possible (J0-J14).
+                                Pour ICFEr (FEVG &lt; 50%, ESC 2026). Débuter <strong>EN PARALLÈLE</strong> si possible (J0-J14).
                             </p>
 
                             <div className="grid grid-cols-2 gap-3">
